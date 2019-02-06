@@ -3,23 +3,22 @@ import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { DashboardComponent } from './dashboard/dashboard.component';
-import { MatGridListModule, MatCardModule, MatMenuModule, MatIconModule, MatButtonModule, MatToolbarModule, MatSidenavModule, MatListModule } from '@angular/material';
+import { MatGridListModule, MatCardModule,
+  MatMenuModule, MatIconModule, MatButtonModule,
+  MatToolbarModule, MatSidenavModule, MatListModule, MatSelectModule } from '@angular/material';
 import { LayoutModule } from '@angular/cdk/layout';
-import { NavComponent } from './nav/nav.component';
 import { GeoMapDemoComponent } from './pages/geo-map-demo/geo-map-demo.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    DashboardComponent,
-    NavComponent,
     GeoMapDemoComponent
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     MatGridListModule,
+    MatSelectModule,
     MatCardModule,
     MatMenuModule,
     MatIconModule,
