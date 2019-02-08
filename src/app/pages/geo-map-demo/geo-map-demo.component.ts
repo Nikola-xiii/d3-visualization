@@ -1,5 +1,6 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { GeoMapChart } from '../../../D3/charts/geo-map.d3';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 
 export interface DataOption {
   value: string;
@@ -11,7 +12,7 @@ export interface DataOption {
   templateUrl: './geo-map-demo.component.html',
   styleUrls: ['./geo-map-demo.component.scss']
 })
-export class GeoMapDemoComponent implements OnInit {
+export class GeoMapDemoComponent implements AfterViewInit {
   @ViewChild('map') public mapEl: ElementRef;
   chart = {};
 
@@ -21,10 +22,17 @@ export class GeoMapDemoComponent implements OnInit {
     {value: 'election', viewValue: 'Election'}
   ];
 
-  constructor() { }
+  constructor(private httpService: HttpClient) { }
 
-  ngOnInit() {
-    this.chart = new GeoMapChart(this.mapEl);
+  ngAfterViewInit() {
+    this.httpService.get('./assets/datasets/uk.topojson.json').subscribe(
+      data => {
+        this.chart = new GeoMapChart(this.mapEl, data);
+      },
+      (err: HttpErrorResponse) => {
+        console.log (err.message);
+      }
+    );
   }
 
 }

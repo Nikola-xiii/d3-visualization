@@ -3,11 +3,19 @@ import * as topojson from 'topojson';
 import { ElementRef } from '@angular/core';
 
 export class GeoMapChart {
-  constructor(selector: ElementRef) {
+  constructor(selector: ElementRef, data) {
     console.log(selector);
-    const path = d3.geoPath();
-    const width = 500;
-    const height = 500;
+
+    const width = 900;
+    const height = 900;
+    // set up map projection, and position it.
+    const projection = d3.geoAlbers()
+      .center([1.5, 55.2])
+      .rotate([4.4, 0])
+      .parallels([80, 80])
+      .scale(3300)
+      .translate([width / 2, height / 2]);
+    const path = d3.geoPath().projection(projection);
 
     const svg = d3.select(selector.nativeElement).append('svg')
       .attr('width', width)
@@ -24,12 +32,9 @@ export class GeoMapChart {
           })
       );
 
-    d3.json('../../datasets/uk.topojson.json', (error, uk) => {
-      if (error) { return console.error(error); }
-
-      svg.append('path')
-        .datum(topojson.feature(uk, uk.objects.subunits))
-        .attr('d', d3.geoPath().projection(d3.geoMercator()));
-    });
+    g.selectAll('path')
+      .data(topojson.feature(data, data.objects.subunits).features)
+      .enter().append('path').attr('fill', 'grey')
+      .attr('d', path);
   }
 }
