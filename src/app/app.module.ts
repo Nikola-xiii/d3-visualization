@@ -8,6 +8,7 @@ import { MatGridListModule, MatCardModule,
   MatToolbarModule, MatSidenavModule, MatListModule, MatSelectModule } from '@angular/material';
 import { LayoutModule } from '@angular/cdk/layout';
 import { GeoMapDemoComponent } from './pages/geo-map-demo/geo-map-demo.component';
+import { HttpClientModule, HttpClientJsonpModule} from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -16,6 +17,7 @@ import { GeoMapDemoComponent } from './pages/geo-map-demo/geo-map-demo.component
   ],
   imports: [
     BrowserModule,
+    HttpClientModule,
     BrowserAnimationsModule,
     MatGridListModule,
     MatSelectModule,
@@ -26,7 +28,8 @@ import { GeoMapDemoComponent } from './pages/geo-map-demo/geo-map-demo.component
     LayoutModule,
     MatToolbarModule,
     MatSidenavModule,
-    MatListModule
+    MatListModule,
+    HttpClientJsonpModule
   ],
   providers: [],
   bootstrap: [AppComponent]
