@@ -7,7 +7,7 @@ import { GeoMapConfig } from '../models/geo-map.model';
 
 
 export class GeoMapChart {
-  constructor(selector: ElementRef, data, config: GeoMapConfig) {
+  constructor(selector: ElementRef, data, config: GeoMapConfig, electionData) {
 
     const svg = this.chart(selector, config.width, config.height);
     const path = this.setGeoPath(config.width, config.height);
@@ -23,7 +23,7 @@ export class GeoMapChart {
               + ')scale(' + d3.event.scale + ')');
           })
       );
-    this.render(data, g, path);
+    this.render(electionData, data, g, path);
   }
 
   // set up map projection, and position, size
@@ -45,10 +45,21 @@ export class GeoMapChart {
     return d3.geoPath().projection(projection);
   }
 
-  private render(data, g, path: GeoPath) {
+  private getElectonWinnerById(electionData, id): string {
+    return electionData.data.find(subunit => subunit.id === id).winner;
+  }
+
+  private render(electionData, data, g, path: GeoPath) {
+    const color = d3.scaleOrdinal().range(['#0382AB', '#DA1502', '#722889', '#FDB218', '#7AB630', '#3C862D', '#F0DE4C', '#FF9900', 'gray']);
+    color.domain([
+      'Conservatives', 'Labour', 'UKIP', 'Liberal Democrats', 'Green Party',
+      'Plaid Cymru', 'Scottish National Party', 'Democratic Unionist Party', 'Other']);
     g.selectAll('path')
       .data(topojson.feature(data, data.objects.subunits).features)
-      .enter().append('path').attr('fill', 'grey')
-      .attr('d', path);
+      .enter().append('path')
+      .attr('d', path)
+      .style('fill', (d) => {
+        return color(this.getElectonWinnerById(electionData, d.properties.id));
+      });
   }
 }
