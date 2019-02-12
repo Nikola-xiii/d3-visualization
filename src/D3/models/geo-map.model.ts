@@ -1,4 +1,3 @@
-export class GeoMapConfig {
-  width: number;
-  height: number;
+export class GeoMapModel {
+  
 }
