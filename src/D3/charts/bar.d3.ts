@@ -13,6 +13,24 @@ export class BarChart {
 
     x.domain(data.map(d => d.year));
     y.domain([0, d3.max(data, d => d.rate)]);
+
+    svg.selectAll('.bar')
+      .data(data)
+      .enter().append('rect')
+      .attr('class', 'bar')
+      .attr('x', (d) => x(d.salesperson))
+      .attr('width', x.bandwidth())
+      .attr('y', d => y(d.rate))
+      .attr('height', d => config.height - y(d.rate));
+
+    // add the x Axis
+    svg.append('g')
+      .attr('transform', 'translate(0,' + config.height + ')')
+      .call(d3.axisBottom(x));
+
+    // add the y Axis
+    svg.append('g')
+      .call(d3.axisLeft(y));
   }
 
   private svg(selector, config: LineChartConfig) {
