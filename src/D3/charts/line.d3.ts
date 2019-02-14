@@ -5,7 +5,6 @@ import { Line } from 'd3/index';
 
 export class LineChart {
   constructor(selector: ElementRef, data: ArrayLike<LineChartData>, config: LineChartConfig) {
-    const format = d3.timeFormat('%Y-%m-%d');
     const x = d3.scaleTime()
       .domain(d3.extent(data, (d) => new Date(d.date)))
       .range([config.margin.left, config.width - config.margin.right]);
@@ -39,11 +38,11 @@ export class LineChart {
       .y(yScale);
     const svg = this.svg(selector, config);
 
-    // svg.append('g')
-    //   .call(xAxis);
-    //
-    // svg.append('g')
-    //   .call(yAxis);
+    svg.append('g')
+      .call(xAxis);
+
+    svg.append('g')
+      .call(yAxis);
 
     svg.append('path')
       .datum(data)
