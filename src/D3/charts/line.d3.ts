@@ -1,11 +1,12 @@
 import { LineChartConfig, LineChartData } from '../models/line.model';
 import * as d3 from 'd3/index';
 import { ElementRef } from '@angular/core';
+import { Line } from 'd3/index';
 
 export class LineChart {
-  constructor(selector: ElementRef, data: LineChartData[], config: LineChartConfig) {
+  constructor(selector: ElementRef, data: ArrayLike<LineChartData>, config: LineChartConfig) {
     const x = d3.scaleTime()
-      .domain(d3.extent(data, d => d.date))
+      .domain(d3.extent(data, (d)  => d.date))
       .range([config.margin.left, config.width - config.margin.right]);
 
     const xAxis = g => g
@@ -25,11 +26,14 @@ export class LineChart {
         .attr('text-anchor', 'start')
         .attr('font-weight', 'bold'));
 
-    const line = d3.line()
-      .defined(d => !isNaN(d.value))
-      .x(d => x(d.date))
-      .y(d => y(d.value));
+    const xScale = (d) => x(d.date);
+    const yScale = (d) => x(d.value);
+    const definedCheck = (d) => !isNaN(d.value);
 
+    // @ts-ignore
+    const line: Line<LineChartData> = d3.line().defined(definedCheck)
+      .x(xScale)
+      .y(yScale);
     const svg = this.svg(selector, config);
 
     svg.append('g')
