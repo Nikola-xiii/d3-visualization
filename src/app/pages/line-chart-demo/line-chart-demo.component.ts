@@ -26,13 +26,12 @@ export class LineChartDemoComponent implements AfterViewInit {
   chart = {};
 
   ngAfterViewInit() {
-    this.httpService.get('./assets/datasets/euro-british-pound.csv').subscribe(
+    this.httpService.get('./assets/datasets/euro-british-pound.json').subscribe(
       (data: LineChartData[]) => {
-        console.log(data);
-        // this.chart = new LineChart(this.chartEl, data, this.lineChartConfig);
+        this.chart = new LineChart(this.chartEl, data, this.lineChartConfig);
       },
       (err: HttpErrorResponse) => {
-        console.log (err.message);
+        console.log (err);
       });
   }
 }
