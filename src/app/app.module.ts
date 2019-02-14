@@ -9,11 +9,13 @@ import { MatGridListModule, MatCardModule,
 import { LayoutModule } from '@angular/cdk/layout';
 import { GeoMapDemoComponent } from './pages/geo-map-demo/geo-map-demo.component';
 import { HttpClientModule, HttpClientJsonpModule} from '@angular/common/http';
+import { LineChartDemoComponent } from './pages/line-chart-demo/line-chart-demo.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    GeoMapDemoComponent
+    GeoMapDemoComponent,
+    LineChartDemoComponent
   ],
   imports: [
     BrowserModule,
