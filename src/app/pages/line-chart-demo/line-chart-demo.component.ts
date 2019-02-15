@@ -29,15 +29,6 @@ export class LineChartDemoComponent implements AfterViewInit {
 
   chart = {};
 
-  barChartData: Array<BarChartData> = [
-    {year: '2011', rate: 3.1},
-    {year: '2012', rate: 3.1},
-    {year: '2013', rate: 3.1},
-    {year: '2014', rate: 3.1},
-    {year: '2015', rate: 3.1},
-    {year: '2016', rate: 3.1},
-  ];
-
   ngAfterViewInit() {
     forkJoin(
       this.httpService.get('./assets/datasets/euro-british-pound.json'),
