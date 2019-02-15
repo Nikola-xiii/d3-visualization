@@ -5,6 +5,7 @@ import { LineChart } from '../../../D3/charts/line.d3';
 import { LineChartConfig, LineChartData } from '../../../D3/models/line.model';
 import { BarChart } from '../../../D3/charts/bar.d3';
 import { BarChartData } from '../../../D3/models/bar.model';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-line-chart-demo',
@@ -38,10 +39,13 @@ export class LineChartDemoComponent implements AfterViewInit {
   ];
 
   ngAfterViewInit() {
-    this.httpService.get('./assets/datasets/euro-british-pound.json').subscribe(
-      (data: LineChartData[]) => {
-        this.chart = new LineChart(this.lineChartEl, data, this.lineChartConfig);
-        this.chart = new BarChart(this.barChartEl, this.barChartData, this.lineChartConfig);
+    forkJoin(
+      this.httpService.get('./assets/datasets/euro-british-pound.json'),
+      this.httpService.get('./assets/datasets/unemployment-rate.json')
+    ).subscribe(
+      ([dataLine, dataBar]) => {
+        this.chart = new LineChart(this.lineChartEl, dataLine, this.lineChartConfig);
+        this.chart = new BarChart(this.barChartEl, dataBar, this.lineChartConfig);
       },
       (err: HttpErrorResponse) => {
         console.log (err);
