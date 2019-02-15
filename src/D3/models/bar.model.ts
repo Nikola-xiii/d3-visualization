@@ -7,6 +7,6 @@ export class BarChartConfig {
 }
 
 export class BarChartData {
-  year: Date;
+  year: string;
   rate: number;
 }

@@ -3,6 +3,8 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { GeoMapChart } from '../../../D3/charts/geo-map.d3';
 import { LineChart } from '../../../D3/charts/line.d3';
 import { LineChartConfig, LineChartData } from '../../../D3/models/line.model';
+import { BarChart } from '../../../D3/charts/bar.d3';
+import { BarChartData } from '../../../D3/models/bar.model';
 
 @Component({
   selector: 'app-line-chart-demo',
@@ -10,7 +12,8 @@ import { LineChartConfig, LineChartData } from '../../../D3/models/line.model';
   styleUrls: ['./line-chart-demo.component.scss']
 })
 export class LineChartDemoComponent implements AfterViewInit {
-  @ViewChild('lineChart') public chartEl: ElementRef;
+  @ViewChild('lineChart') public lineChartEl: ElementRef;
+  @ViewChild('barChart') public barChartEl: ElementRef;
   constructor(private httpService: HttpClient) { }
   lineChartConfig: LineChartConfig = {
     width: 600,
@@ -25,10 +28,20 @@ export class LineChartDemoComponent implements AfterViewInit {
 
   chart = {};
 
+  barChartData: Array<BarChartData> = [
+    {year: '2011', rate: 3.1},
+    {year: '2012', rate: 3.1},
+    {year: '2013', rate: 3.1},
+    {year: '2014', rate: 3.1},
+    {year: '2015', rate: 3.1},
+    {year: '2016', rate: 3.1},
+  ];
+
   ngAfterViewInit() {
     this.httpService.get('./assets/datasets/euro-british-pound.json').subscribe(
       (data: LineChartData[]) => {
-        this.chart = new LineChart(this.chartEl, data, this.lineChartConfig);
+        this.chart = new LineChart(this.lineChartEl, data, this.lineChartConfig);
+        this.chart = new BarChart(this.barChartEl, this.barChartData, this.lineChartConfig);
       },
       (err: HttpErrorResponse) => {
         console.log (err);
