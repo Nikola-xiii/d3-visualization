@@ -29,8 +29,7 @@ export class GeoMapDemoComponent implements AfterViewInit {
     height: 900
   };
 
-  constructor(private httpService: HttpClient) {
-  }
+  constructor(private httpService: HttpClient) {}
 
   ngAfterViewInit() {
     forkJoin(
@@ -38,7 +37,6 @@ export class GeoMapDemoComponent implements AfterViewInit {
       this.httpService.get('./assets/datasets/uk.topojson.json')
     ).subscribe(
       ([electionData, mapData]) => {
-        console.log(electionData, mapData);
         this.chart = new GeoMapChart(this.mapEl, mapData, this.geoMapConfig, electionData);
       },
       (err: HttpErrorResponse) => {

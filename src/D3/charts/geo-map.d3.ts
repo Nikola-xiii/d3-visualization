@@ -4,8 +4,6 @@ import { ElementRef } from '@angular/core';
 import { GeoPath, Path } from 'd3/index';
 import { GeoMapConfig } from '../models/geo-map.model';
 
-
-
 export class GeoMapChart {
   constructor(selector: ElementRef, data, config: GeoMapConfig, electionData) {
 
