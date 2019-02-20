@@ -4,8 +4,9 @@ import * as d3 from 'd3';
 import { BarChartData } from '../models/bar.model';
 
 export class BarChart {
+  public chart = {};
   constructor(selector: ElementRef, data: ArrayLike<BarChartData>, config: LineChartConfig) {
-    const svg = this.svg(selector, config);
+    const chart = this.svg(selector, config);
     const scaleX = d3.scaleBand()
       .range([0, config.width])
       .padding(0.1);
@@ -16,13 +17,7 @@ export class BarChart {
     scaleX.domain(data.map(d => d.year));
     scaleY.domain([0, d3.max(data, d => d.rate)]);
 
-    svg.append('g')
-      .call(this.xAxisView(config, scaleX));
-
-    svg.append('g')
-      .call(this.yAxisView(config, scaleY));
-
-    svg.selectAll('.bar')
+    chart.selectAll('.bar')
     // @ts-ignore
       .data(data)
       .enter().append('rect')
@@ -32,22 +27,6 @@ export class BarChart {
       .attr('y', d => scaleY(d.rate))
       .attr('height', d => config.height - scaleY(d.rate));
 
-  }
-
-  private xAxisView(config, scaleX) {
-    return g => g
-      .attr('transform', 'translate(0,' + config.height + ')')
-      .call(d3.axisBottom(scaleX).ticks(config.width / 80).tickSizeOuter(0));
-  }
-
-  private yAxisView(config, scaleY) {
-    return g => g
-      .call(d3.axisLeft(scaleY))
-      .call(g => g.select('.domain').remove())
-      .call(g => g.select('.tick:last-of-type text').clone()
-        .attr('x', 3)
-        .attr('text-anchor', 'start')
-        .attr('font-weight', 'bold'));
   }
 
   private svg(selector, config: LineChartConfig) {
