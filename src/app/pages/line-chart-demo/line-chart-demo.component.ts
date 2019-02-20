@@ -35,7 +35,9 @@ export class LineChartDemoComponent implements AfterViewInit {
       this.httpService.get('./assets/datasets/unemployment-rate.json')
     ).subscribe(
       ([dataLine, dataBar]) => {
+        // @ts-ignore
         this.chart = new LineChart(this.lineChartEl, dataLine, this.lineChartConfig);
+        // @ts-ignore
         this.chart = new BarChart(this.barChartEl, dataBar, this.lineChartConfig);
       },
       (err: HttpErrorResponse) => {

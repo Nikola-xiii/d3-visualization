@@ -6,34 +6,48 @@ import { BarChartData } from '../models/bar.model';
 export class BarChart {
   constructor(selector: ElementRef, data: ArrayLike<BarChartData>, config: LineChartConfig) {
     const svg = this.svg(selector, config);
-    const x = d3.scaleBand()
+    const scaleX = d3.scaleBand()
       .range([0, config.width])
       .padding(0.1);
-    const y = d3.scaleLinear()
+    const scaleY = d3.scaleLinear()
       .range([config.height, 0]);
 
     // @ts-ignore
-    x.domain(data.map(d => d.year));
-    y.domain([0, d3.max(data, d => d.rate)]);
+    scaleX.domain(data.map(d => d.year));
+    scaleY.domain([0, d3.max(data, d => d.rate)]);
+
+    svg.append('g')
+      .call(this.xAxisView(config, scaleX));
+
+    svg.append('g')
+      .call(this.yAxisView(config, scaleY));
 
     svg.selectAll('.bar')
     // @ts-ignore
       .data(data)
       .enter().append('rect')
       .attr('fill', 'grey')
-      .attr('x', (d) => x(d.year))
-      .attr('width', x.bandwidth())
-      .attr('y', d => y(d.rate))
-      .attr('height', d => config.height - y(d.rate));
+      .attr('x', (d) => scaleX(d.year))
+      .attr('width', scaleX.bandwidth())
+      .attr('y', d => scaleY(d.rate))
+      .attr('height', d => config.height - scaleY(d.rate));
 
-    // add the x Axis
-    svg.append('g')
+  }
+
+  private xAxisView(config, scaleX) {
+    return g => g
       .attr('transform', 'translate(0,' + config.height + ')')
-      .call(d3.axisBottom(x));
+      .call(d3.axisBottom(scaleX).ticks(config.width / 80).tickSizeOuter(0));
+  }
 
-    // add the y Axis
-    svg.append('g')
-      .call(d3.axisLeft(y));
+  private yAxisView(config, scaleY) {
+    return g => g
+      .call(d3.axisLeft(scaleY))
+      .call(g => g.select('.domain').remove())
+      .call(g => g.select('.tick:last-of-type text').clone()
+        .attr('x', 3)
+        .attr('text-anchor', 'start')
+        .attr('font-weight', 'bold'));
   }
 
   private svg(selector, config: LineChartConfig) {
